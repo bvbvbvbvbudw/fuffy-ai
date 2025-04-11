@@ -24,7 +24,7 @@ git clone https://github.com/ggerganov/llama.cpp.git
 cd llama.cpp
 ```
 
-Build the project using CMake(Linux):
+Build the project using CMake:
 ```
 mkdir build
 cd build
