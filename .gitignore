@@ -1,6 +1,10 @@
 *.pyc
 *.pyo
+
 __pycache__/
+bots/__pycache__
+core/__pycache__
+interfaces/__pycache__
 
 venv/
 env/

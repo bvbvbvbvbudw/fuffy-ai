@@ -1,6 +1,12 @@
+# TODO: make pyside6 front
+
+import sys, os
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
-from brain import Fuffy
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from core.brain import Fuffy
 
 fuffy = Fuffy()
 

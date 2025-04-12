@@ -1,6 +1,6 @@
 import subprocess, os, re
-from memory import FuffyMemory
-from consts import MODEL_PATH, LLAMA_RUN_PATH, TOKENS, THREADS, TEMP, TIMEOUT
+from core.memory import FuffyMemory
+from core.consts import MODEL_PATH, LLAMA_RUN_PATH, TOKENS, THREADS, TEMP, TIMEOUT
 
 class Fuffy:
     def __init__(self):
@@ -12,13 +12,25 @@ class Fuffy:
             raise FileNotFoundError(f"Llama executable not found: {self.llama_run}")
         if not os.path.exists(self.model_path):
             raise FileNotFoundError(f"Model file not found: {self.model_path}")
+        
+    def extract_fuffy_response(self, output: str) -> str:
+        match = re.search(r'Assistant:\s*(.*?)(<\|im_end\|>|Fuffy:|User:|$)', output, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+    
+        match = re.search(r'Fuffy:\s*(.*?)(User:|$)', output, re.DOTALL)
+        if match:
+            return match.group(1).strip()
+    
+        return output.strip()
+
 
     def think(self, prompt: str) -> str:
         self.memory.save_dialogue("user", prompt)
         
         # context = self.memory.get_last_context()
         # context отключен
-        #  full_prompt = f"{context}\nUser: {prompt}\nFuffy:"
+        # full_prompt = f"{context}\nUser: {prompt}\nFuffy:"
         
         full_prompt = f"User: {prompt}\nFuffy:"
         command = [
@@ -39,13 +51,12 @@ class Fuffy:
                 check=True,
                 timeout=TIMEOUT
             )
-            # output = result.stdout.split("Assistant:")[-1]
-            # output = output.split("User:")[0].strip()
-            # Тут исправить, чтобы его ответ первый приходил, а не последний, маркеры.
-            # self.memory.save_dialogue("fuffy", output)
-            # return output
-            return result.strip()
-            
+            raw_output = result.stdout
+            # self.memory.save_raw_output(raw_output)
+            reply = self.extract_fuffy_response(raw_output)
+            # self.memory.save_dialogue("fuffy", reply)
+            return reply
+
         except subprocess.CalledProcessError as e:
             print(f"Error running command: {e}")
             return "Sorry, I'm having trouble thinking right now."

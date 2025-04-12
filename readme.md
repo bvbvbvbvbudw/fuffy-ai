@@ -41,16 +41,33 @@ Once downloaded, place the model file in the models directory of your project.
 ### 3. Create the consts.py File
 Create a new Python file named consts.py in the project root directory. In this file, define the path to your model and the llama-cli binary:
 ```
-model = "models/mistral-7b-instruct-v0.1.Q4_K_M.gguf"
-path_to_llama = "./llama.cpp/build/bin/llama-cli"
+MODEL_PATH = "C:/path/to/models/mistral.gguf"
+LLAMA_RUN_PATH = "C:/path/to/llama.cpp/build/bin/Release/llama-run.exe"
+THREADS = "8"
+TOKENS = "16"
+TEMP = "0.5"
+TIMEOUT = 240
+TELEGRAM_TOKEN = ""
 ```
 Make sure to adjust the path to the model file and the llama-cli binary if they are located elsewhere on your system.
 
 ### 4. Run the Project
-After setting up the model and configuration, you can run the project:
+After setting up the model and configuration, you can run the project in one of the following ways:
+**Using the terminal interface:**
 ```
 python main.py
 ```
+
+**Using the Telegram bot:**
+```
+python bots/telegram.py
+```
+
+**Using the graphical interface (GUI):**
+```
+python bots/fuffy_gui.py
+```
+
 This will start the conversational AI. You can interact with Fuffy by typing messages, and it will respond based on the model's training.
 
 ## Additional Notes
